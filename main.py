@@ -30,6 +30,7 @@ for countryPairFilename in countryPairFilenameList:
 
 # Assuming time-invariance of pattern being learnt
 X = X.drop(['year'],axis=1) # drop redundant date attr
+X = X.drop(['week_of_year'],axis=1)
 
 # Split input and target
 y = X['mat_conflict']
