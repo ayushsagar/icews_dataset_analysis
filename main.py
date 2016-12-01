@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn import cross_validation, metrics
 dtype=theano.config.floatX='float64'
 
-NO_OF_DATASET_FILES_TO_READ = 10
+NO_OF_DATASET_FILES_TO_READ = 100
     
 def transformTarget(val):
     return 1 if val>0 else 0
@@ -37,6 +37,9 @@ X = X.drop(['mat_conflict'],axis=1)
 
 # Transform target
 y = y.apply(transformTarget)
+
+# Normalize inpit
+X = X/X.max().astype(dtype)
 
 # shift target columns up by 1 row, and input columns down by 1 row for prediction task 
 X = X.ix[:(len(X)-2),:]
@@ -92,7 +95,7 @@ def sample_weights(sizeX, sizeY):
     
 
 n_in = 4 # input vector size
-n_hidden = n_i = n_c = n_o = n_f = 20
+n_hidden = n_i = n_c = n_o = n_f = 100
 n_y = 1 # output vector size
 
 # initialize weights
