@@ -187,3 +187,20 @@ plt.title('Training Curve')
 plt.xlabel('Epoch(s)')
 plt.ylabel('Error')
 plt.show()
+
+round_vec = np.vectorize(round)
+y_pred = round_vec(predictions(X_test))
+
+acc = metrics.accuracy_score(y_test, y_pred)
+prec = metrics.precision_score(y_test, y_pred)
+recall = metrics.recall_score(y_test, y_pred)
+f1score = metrics.f1_score(y_test, y_pred)
+
+confmat = metrics.confusion_matrix(y_test, y_pred)
+
+print 'Confusion matrix:'
+print confmat
+print '\nAccuracy: %.2f%%' %(acc * 100)
+print 'Precision score: %.2f%%'%(prec * 100)
+print 'Recall score %.2f%%'%(recall * 100)
+print 'F1 Score: %.2f%%'%(f1score * 100)
