@@ -10,23 +10,32 @@ import pandas as pd
 from sklearn import cross_validation, metrics
 dtype=theano.config.floatX='float64'
 
-NO_OF_DATASET_FILES_TO_READ = 100
+# No of dataset joins << No of data points in each file
+NO_OF_DATASET_FILES_TO_READ = 10
     
 def transformTarget(val):
-    return 1 if val>0 else 0
+    return 1 if val > 0 else 0
 
-countryPairFilenameList = glob("./dataset/*.csv")
+# Use saved sparsity list to find out least sparse country-pairs
+sparsityList = pd.read_csv("./dict.csv",header=None)
+sparsityList = sparsityList.sort_values(by=[1],ascending=False)
 
-# Get: no. of files << no. of rows in each file
-shuffle(countryPairFilenameList)
-countryPairFilenameList = countryPairFilenameList[:NO_OF_DATASET_FILES_TO_READ]
+countryPairFilenameList = []
+count = 0
+
+for index, row in sparsityList.iterrows():
+    countryPairFilenameList += glob("./dataset/" + str(row[0]) + ".csv")
+    count += 1
+    if (count > NO_OF_DATASET_FILES_TO_READ):
+        break
+
+#shuffle(countryPairFilenameList)
 
 # Concatenate one-by-one
 X = pd.DataFrame()
 for countryPairFilename in countryPairFilenameList:
     x = pd.read_csv(countryPairFilename)
     X = X.append(x,ignore_index=True)
-    print 'reading', countryPairFilename
 
 # Assuming time-invariance of pattern being learnt
 X = X.drop(['year'],axis=1) # drop redundant date attr
@@ -40,7 +49,7 @@ X = X.drop(['mat_conflict'],axis=1)
 y = y.apply(transformTarget)
 
 # Normalize inpit
-X = X/X.max().astype(dtype)
+#X = X/X.max().astype(dtype)
 
 # shift target columns up by 1 row, and input columns down by 1 row for prediction task 
 X = X.ix[:(len(X)-2),:]
@@ -57,11 +66,8 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 
 print 'Dataset loaded'
 
-# ---------------------------------------------
-# ---------------------------------------------
-# ---------------------------------------------
-# ---------------------------------------------
-# ---------------------------------------------
+
+# Begin model
 
 warnings.filterwarnings("ignore") # will hide deprecation warning
 
