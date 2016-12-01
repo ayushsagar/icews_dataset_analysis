@@ -95,7 +95,7 @@ def sample_weights(sizeX, sizeY):
     return values  
     
 
-n_in = 4 # input vector size
+n_in = 3 # input vector size
 n_hidden = n_i = n_c = n_o = n_f = 100
 n_y = 1 # output vector size
 
