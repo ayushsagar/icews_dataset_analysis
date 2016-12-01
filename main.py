@@ -11,7 +11,7 @@ from sklearn import cross_validation, metrics
 dtype=theano.config.floatX='float64'
 
 # No of dataset joins << No of data points in each file
-NO_OF_DATASET_FILES_TO_READ = 10
+NO_OF_DATASET_FILES_TO_READ = 100
     
 def transformTarget(val):
     return 1 if val > 0 else 0
@@ -29,7 +29,7 @@ for index, row in sparsityList.iterrows():
     if (count > NO_OF_DATASET_FILES_TO_READ):
         break
 
-#shuffle(countryPairFilenameList)
+shuffle(countryPairFilenameList)
 
 # Concatenate one-by-one
 X = pd.DataFrame()
@@ -49,13 +49,13 @@ X = X.drop(['mat_conflict'],axis=1)
 y = y.apply(transformTarget)
 
 # Normalize inpit
-#X = X/X.max().astype(dtype)
+X = X/X.max().astype(dtype)
 
 # shift target columns up by 1 row, and input columns down by 1 row for prediction task 
 X = X.ix[:(len(X)-2),:]
 y = y.ix[1:,]
 
-#X = X/X.max().astype(dtype)
+# Convert to numpy matrices
 X = X.as_matrix()
 y = y.as_matrix()
 y = y.reshape(y.shape[0],1)
