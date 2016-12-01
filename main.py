@@ -17,7 +17,7 @@ def transformTarget(val):
     return 1 if val > 0 else 0
 
 # Use saved sparsity list to find out least sparse country-pairs
-sparsityList = pd.read_csv("./dict.csv",header=None)
+sparsityList = pd.read_csv("./sparsity.csv",header=None)
 sparsityList = sparsityList.sort_values(by=[1],ascending=False)
 
 countryPairFilenameList = []
